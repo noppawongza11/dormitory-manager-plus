@@ -17,14 +17,14 @@ const Index = () => {
       <section className="relative h-[70vh] overflow-hidden">
         <img
           src="/images/building.jpg"
-          alt="สุขสันต์ แมนชั่น"
+          alt="DORMITORYNAME"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-[hsl(var(--hero-overlay)/0.55)]" />
         <div className="absolute inset-0 flex items-center justify-center text-center px-4">
           <div className="animate-fade-in">
             <h1 className="font-prompt text-4xl md:text-6xl font-bold text-[hsl(0,0%,100%)] text-shadow-hero mb-4">
-              สุขสันต์ แมนชั่น
+              DORMITORYNAME
             </h1>
             <p className="text-lg md:text-xl text-[hsl(0,0%,90%)] max-w-2xl mx-auto">
               หอพักรายเดือนคุณภาพ ใจกลางเมือง สะดวกสบาย ปลอดภัย ราคาเริ่มต้น 3,500 บาท/เดือน
@@ -63,7 +63,7 @@ const Index = () => {
             <div className="bg-card rounded-xl p-6 border border-border space-y-4">
               <h3 className="font-prompt font-semibold text-lg text-foreground">รายละเอียด</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• อาคาร 5 ชั้น จำนวน 50 ห้อง</li>
+                <li>• อาคาร 5 ชั้น จำนวน 100 ห้อง</li>
                 <li>• ห้องพักขนาด 24-32 ตร.ม.</li>
                 <li>• เฟอร์นิเจอร์ครบชุด พร้อมแอร์</li>
                 <li>• ห้องน้ำในตัวทุกห้อง</li>
@@ -77,18 +77,18 @@ const Index = () => {
                 ที่ตั้ง
               </h3>
               <p className="text-sm text-muted-foreground">
-                123/45 ซอยสุขสันต์ ถนนพหลโยธิน แขวงจตุจักร เขตจตุจักร กรุงเทพมหานคร 10900
+                9/3 หมู่ 6 ถนนประโคนชัย ต.อีสาณ อ.เมือง จ.บุรีรัม 31000
               </p>
               {/* Map embed */}
               <div className="rounded-lg overflow-hidden border border-border aspect-video">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.0!2d100.5536!3d13.8!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQ4JzAwLjAiTiAxMDDCsDMzJzEzLjAiRQ!5e0!3m2!1sth!2sth!4v1600000000000!5m2!1sth!2sth"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15300.0!2d103.1!3d14.99!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTTCsDU5JzI0LjAiTiAxMDPCsDA2JzAwLjAiRQ!5e0!3m2!1sth!2sth!4v1600000000000!5m2!1sth!2sth"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
-                  title="แผนที่ สุขสันต์ แมนชั่น"
+                  title="แผนที่ DORMITORYNAME"
                 />
               </div>
             </div>
@@ -101,9 +101,9 @@ const Index = () => {
         <div className="container mx-auto text-center text-sm text-muted-foreground">
           <p className="flex items-center justify-center gap-2">
             <Phone className="w-4 h-4" />
-            02-123-4567 | 089-123-4567
+            083-260-0108
           </p>
-          <p className="mt-2">© 2026 สุขสันต์ แมนชั่น. สงวนลิขสิทธิ์.</p>
+          <p className="mt-2">© 2026 DORMITORYNAME. สงวนลิขสิทธิ์.</p>
         </div>
       </footer>
     </div>

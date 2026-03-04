@@ -15,15 +15,21 @@ interface Room {
 
 const generateRooms = (): Room[][] => {
   const floors: Room[][] = [];
-  const statuses: RoomStatus[] = ["available", "occupied", "reserved"];
   for (let f = 1; f <= 5; f++) {
     const rooms: Room[] = [];
-    for (let r = 1; r <= 10; r++) {
+    for (let r = 1; r <= 20; r++) {
+      // Make ~65% available
+      let status: RoomStatus;
+      const rand = Math.random();
+      if (rand < 0.65) status = "available";
+      else if (rand < 0.85) status = "occupied";
+      else status = "reserved";
+
       rooms.push({
         id: `${f}${r.toString().padStart(2, "0")}`,
         floor: f,
         number: r,
-        status: statuses[Math.floor(Math.random() * 3)],
+        status,
         price: 3500 + (f - 1) * 500,
         size: 24 + Math.floor(Math.random() * 8),
       });
@@ -46,8 +52,8 @@ const FloorPlan = () => {
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
 
   const rooms = allFloors[currentFloor];
-  const leftRooms = rooms.slice(0, 5);
-  const rightRooms = rooms.slice(5, 10);
+  const leftRooms = rooms.slice(0, 10);
+  const rightRooms = rooms.slice(10, 20);
 
   const goUp = () => {
     if (currentFloor < allFloors.length - 1) setCurrentFloor(currentFloor + 1);
@@ -57,7 +63,7 @@ const FloorPlan = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-5xl mx-auto">
       {/* Floor indicator */}
       <div className="text-center mb-6">
         <h2 className="font-prompt text-2xl font-bold text-foreground">ชั้นที่ {currentFloor + 1}</h2>
