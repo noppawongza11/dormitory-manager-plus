@@ -13,11 +13,11 @@ const Contact = () => {
           {/* Contact info */}
           <div className="space-y-5">
             {[
-              { icon: Phone, label: "โทรศัพท์", value: "02-123-4567, 089-123-4567" },
-              { icon: Mail, label: "อีเมล", value: "info@suksant-mansion.com" },
-              { icon: MapPin, label: "ที่อยู่", value: "123/45 ซอยสุขสันต์ ถ.พหลโยธิน แขวงจตุจักร เขตจตุจักร กรุงเทพฯ 10900" },
+              { icon: Phone, label: "โทรศัพท์", value: "083-260-0108" },
+              { icon: Mail, label: "อีเมล", value: "stevenkungch@gmail.com" },
+              { icon: MapPin, label: "ที่อยู่", value: "9/3 หมู่ 6 ถนนประโคนชัย ต.อีสาณ อ.เมือง จ.บุรีรัม 31000" },
               { icon: Clock, label: "เวลาทำการ", value: "จันทร์ - เสาร์ 08:00 - 18:00 น." },
-              { icon: MessageCircle, label: "Line", value: "@suksant-mansion" },
+              { icon: MessageCircle, label: "Line", value: "@dormitoryname" },
             ].map((item) => (
               <div key={item.label} className="flex items-start gap-4 bg-card rounded-xl border border-border p-5 shadow-sm">
                 <item.icon className="w-5 h-5 text-primary mt-0.5 shrink-0" />

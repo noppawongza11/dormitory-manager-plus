@@ -11,7 +11,7 @@ const Login = () => {
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 font-prompt font-bold text-2xl text-primary">
             <Building2 className="w-8 h-8" />
-            สุขสันต์ แมนชั่น
+            DORMITORYNAME
           </Link>
         </div>
 
