@@ -1,73 +1,25 @@
-# Welcome to your Lovable project
+# Dormitory Manager Plus
 
-## Project info
+สร้างเว็บบริหารจัดการหอพักรายเดือน โดยมีหน้าหลัก หน้าจองหอพัก หน้าแจ้งปัญหา หน้าแจ้งเตือน หน้าติดต่อเพิ่มเติม และหน้าล็อคอิน โดยให้เมนูต่างๆ อยู่ข้างบน หน้าจอหลักจะแสดงรูปภาพและรายละเอียดต่างๆ ของหอพัก เช่น ที่ตั้งอยู่ตรงไหน แมพ รายละเอียดต่างๆ ประมาณนั้น
+หน้าจองหอพักมีชั้น ชั้นละ10ห้อง มีโถงทางเดินเขียนเป็นโถงชั้น1 มีบรรไดขึ้นลง กดขึ้นก็ไปชั้นต่อไป กดลงก็ลงมาชั้นเดิม ทำบรรไดขึ้นลงข้างๆกันเลยขึ้นครึ่ง ลงครึ่ง และเวลากดที่ห้องห้องพัก จะแสดงรายละเอียดต่างๆของห้องพัก และจะแสดงรูปห้องพัก สามารถกดเลื่อนดูรูปอื่นๆ ได้ ขอสัก2-3 รูป
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+This project was built with [Lovable](https://lovable.dev).
 
-## How can I edit this code?
+## Build with Lovable
 
-There are several ways of editing your application.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/01341ed2-0c93-4984-b8ae-494f43210692).
 
-**Use Lovable**
+- **Ship faster**: describe what you want to build and Lovable handles the code.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Development
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
+git clone <this-repository-url>
+cd <repository-name>
 npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
