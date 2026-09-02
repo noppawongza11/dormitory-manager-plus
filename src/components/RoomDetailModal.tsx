@@ -1,18 +1,17 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, X, QrCode } from "lucide-react";
+import { ChevronLeft, ChevronRight, QrCode, Loader2 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import type { Room } from "@/components/FloorPlan";
 
 interface RoomDetailModalProps {
   open: boolean;
   onClose: () => void;
-  room: {
-    id: string;
-    floor: number;
-    number: number;
-    status: "available" | "occupied" | "reserved";
-    price: number;
-    size: number;
-  };
+  room: Room;
+  onBooked?: () => void;
 }
 
 const roomImages = ["/images/room1.jpg", "/images/room2.jpg", "/images/room3.jpg"];
@@ -23,19 +22,62 @@ const statusLabels: Record<string, { label: string; className: string }> = {
   reserved: { label: "จองแล้ว", className: "bg-room-reserved text-foreground" },
 };
 
-const RoomDetailModal = ({ open, onClose, room }: RoomDetailModalProps) => {
+const SECURITY_FEE = 2000;
+
+const RoomDetailModal = ({ open, onClose, room, onBooked }: RoomDetailModalProps) => {
   const [currentImage, setCurrentImage] = useState(0);
   const [showBooking, setShowBooking] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const nextImage = () => setCurrentImage((prev) => (prev + 1) % roomImages.length);
   const prevImage = () => setCurrentImage((prev) => (prev - 1 + roomImages.length) % roomImages.length);
 
   const status = statusLabels[room.status];
+  const deposit = room.price * 2;
+  const total = room.price + deposit + SECURITY_FEE;
 
   const handleClose = () => {
     setShowBooking(false);
     setCurrentImage(0);
     onClose();
+  };
+
+  const startBooking = () => {
+    if (!user) {
+      toast.error("กรุณาเข้าสู่ระบบก่อนทำการจอง");
+      navigate("/login");
+      return;
+    }
+    setShowBooking(true);
+  };
+
+  const confirmBooking = async () => {
+    if (!user) return;
+    setBusy(true);
+    const { error } = await supabase.from("bookings").insert({
+      room_id: room.id,
+      user_id: user.id,
+      total_amount: total,
+      deposit_amount: deposit,
+      security_amount: SECURITY_FEE,
+      status: "pending",
+    });
+    setBusy(false);
+    if (error) {
+      toast.error("บันทึกการจองไม่สำเร็จ: " + error.message);
+      return;
+    }
+    await supabase.from("notifications").insert({
+      user_id: user.id,
+      title: "ส่งคำขอจองห้อง " + room.room_code,
+      content: "รอผู้ดูแลตรวจสอบการชำระเงินและอนุมัติการจอง",
+    });
+    toast.success("ส่งคำขอจองเรียบร้อย", { description: "ผู้ดูแลจะตรวจสอบและยืนยันให้เร็วที่สุด" });
+    onBooked?.();
+    handleClose();
+    navigate("/dashboard");
   };
 
   return (
@@ -47,7 +89,7 @@ const RoomDetailModal = ({ open, onClose, room }: RoomDetailModalProps) => {
             <div className="relative aspect-[4/3] bg-muted">
               <img
                 src={roomImages[currentImage]}
-                alt={`ห้อง ${room.id} รูปที่ ${currentImage + 1}`}
+                alt={`ห้อง ${room.room_code} รูปที่ ${currentImage + 1}`}
                 className="w-full h-full object-cover"
               />
               <button
@@ -62,7 +104,6 @@ const RoomDetailModal = ({ open, onClose, room }: RoomDetailModalProps) => {
               >
                 <ChevronRight className="w-5 h-5 text-foreground" />
               </button>
-              {/* Dots */}
               <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
                 {roomImages.map((_, i) => (
                   <button
@@ -79,7 +120,7 @@ const RoomDetailModal = ({ open, onClose, room }: RoomDetailModalProps) => {
             {/* Details */}
             <div className="p-6 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-prompt text-xl font-bold text-foreground">ห้อง {room.id}</h3>
+                <h3 className="font-prompt text-xl font-bold text-foreground">ห้อง {room.room_code}</h3>
                 <span className={`px-3 py-1 rounded-full text-xs font-semibold ${status.className}`}>
                   {status.label}
                 </span>
@@ -110,7 +151,7 @@ const RoomDetailModal = ({ open, onClose, room }: RoomDetailModalProps) => {
 
               {room.status === "available" && (
                 <button
-                  onClick={() => setShowBooking(true)}
+                  onClick={startBooking}
                   className="w-full py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
                 >
                   จองห้องนี้
@@ -123,10 +164,9 @@ const RoomDetailModal = ({ open, onClose, room }: RoomDetailModalProps) => {
           <div className="p-6 space-y-6">
             <div className="text-center">
               <h3 className="font-prompt text-xl font-bold text-foreground mb-1">ยืนยันการจอง</h3>
-              <p className="text-muted-foreground text-sm">ห้อง {room.id} ชั้น {room.floor}</p>
+              <p className="text-muted-foreground text-sm">ห้อง {room.room_code} ชั้น {room.floor}</p>
             </div>
 
-            {/* Payment details */}
             <div className="bg-muted rounded-xl p-5 space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">ค่าเช่ารายเดือน</span>
@@ -134,36 +174,30 @@ const RoomDetailModal = ({ open, onClose, room }: RoomDetailModalProps) => {
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">ค่ามัดจำ (2 เดือน)</span>
-                <span className="font-semibold text-foreground">฿{(room.price * 2).toLocaleString()}</span>
+                <span className="font-semibold text-foreground">฿{deposit.toLocaleString()}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">ค่าประกันห้อง</span>
-                <span className="font-semibold text-foreground">฿2,000</span>
+                <span className="font-semibold text-foreground">฿{SECURITY_FEE.toLocaleString()}</span>
               </div>
               <div className="border-t border-border pt-3 flex justify-between">
                 <span className="font-semibold text-foreground">รวมทั้งหมด</span>
-                <span className="font-bold text-primary text-lg">฿{(room.price * 3 + 2000).toLocaleString()}</span>
+                <span className="font-bold text-primary text-lg">฿{total.toLocaleString()}</span>
               </div>
             </div>
 
-            {/* QR Code */}
             <div className="flex flex-col items-center gap-3">
               <p className="text-sm font-medium text-foreground">สแกน QR Code เพื่อชำระเงิน</p>
-              <div className="bg-[hsl(0,0%,100%)] p-4 rounded-xl border border-border shadow-sm">
+              <div className="bg-card p-4 rounded-xl border border-border shadow-sm">
                 <div className="w-48 h-48 flex items-center justify-center bg-muted rounded-lg relative overflow-hidden">
-                  {/* Simulated QR pattern */}
                   <div className="absolute inset-3 grid grid-cols-7 grid-rows-7 gap-0.5">
                     {Array.from({ length: 49 }).map((_, i) => {
-                      // Create QR-like pattern
                       const row = Math.floor(i / 7);
                       const col = i % 7;
                       const isCorner = (row < 3 && col < 3) || (row < 3 && col > 3) || (row > 3 && col < 3);
-                      const isFilled = isCorner || Math.random() > 0.45;
+                      const isFilled = isCorner || (row * 7 + col) % 3 === 0;
                       return (
-                        <div
-                          key={i}
-                          className={`rounded-sm ${isFilled ? "bg-foreground" : "bg-transparent"}`}
-                        />
+                        <div key={i} className={`rounded-sm ${isFilled ? "bg-foreground" : "bg-transparent"}`} />
                       );
                     })}
                   </div>
@@ -185,9 +219,11 @@ const RoomDetailModal = ({ open, onClose, room }: RoomDetailModalProps) => {
                 ย้อนกลับ
               </button>
               <button
-                onClick={handleClose}
-                className="flex-1 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
+                onClick={confirmBooking}
+                disabled={busy}
+                className="flex-1 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity disabled:opacity-60 inline-flex items-center justify-center gap-2"
               >
+                {busy && <Loader2 className="w-4 h-4 animate-spin" />}
                 ชำระเงินแล้ว
               </button>
             </div>
